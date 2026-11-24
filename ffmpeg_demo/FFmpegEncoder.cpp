@@ -149,7 +149,11 @@ bool FFmpegEncoder::flush() {
 		av_interleaved_write_frame(f_ctx_,packet);
 
 	} 
-
+	int result = av_write_trailer(f_ctx_);
+	if (result < 0) {
+		ErrorUtil::printError(result);
+		return false;
+	}
 	return true;
 }
 
@@ -158,6 +162,19 @@ bool FFmpegEncoder::flush() {
 /// </summary>
 /// <returns></returns>
 bool FFmpegEncoder::stop() {
-
+	if (f_ctx_)
+	{
+		if (!(f_ctx_->oformat->flags & AVFMT_NOFILE))
+		{
+			avio_closep(&f_ctx_->pb);
+		}
+		avformat_free_context(f_ctx_);
+		f_ctx_ = nullptr;
+	}
+	if (vc_ctx_)
+	{
+		avcodec_free_context(&vc_ctx_); // 指针的指针，直接将指针置空
+	}
+	v_stream_ = nullptr;
 	return true;
 }

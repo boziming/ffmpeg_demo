@@ -12,6 +12,6 @@ void ErrorUtil::printError(int error) {
     char buffer[AV_ERROR_MAX_STRING_SIZE];
     av_strerror(error, buffer, sizeof(buffer));
 
-    std::cout << buffer << std::endl;
+    std::cout << __LINE__ << ":" << buffer << std::endl;
 
 }
