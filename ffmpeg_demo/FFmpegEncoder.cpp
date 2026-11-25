@@ -59,7 +59,7 @@ bool FFmpegEncoder::open(int width,int height, const char* filePath) {
 	}
 
 	//1.2 创建媒体流,他由formatctx管理,但为了方便使用，提升为成员变量。Stream的参数和编码器耦合
-	AVStream* v_stream_ = avformat_new_stream(f_ctx_, v_codec);
+	v_stream_ = avformat_new_stream(f_ctx_, v_codec);
 	if (!v_stream_) {
 
 		std::cerr << "创建媒体流失败" << std::endl;
@@ -109,7 +109,7 @@ bool FFmpegEncoder::sendFrame(AVFrame* frame) {
 	}
 
 	// 2.4 读取编码结果并写入
-	AVPacket* packet = nullptr;
+	AVPacket* packet = av_packet_alloc();
 	while (avcodec_receive_packet(vc_ctx_,packet) == 0)
 	{
 		// 1.4 写入中间数据
@@ -139,7 +139,7 @@ bool FFmpegEncoder::sendFrame(AVFrame* frame) {
 bool FFmpegEncoder::flush() {
 
 	avcodec_send_frame(vc_ctx_,nullptr);
-	AVPacket* packet = nullptr;
+	AVPacket* packet = av_packet_alloc();
 	while (avcodec_receive_packet(vc_ctx_,packet) == 0)
 	{
 		av_packet_rescale_ts(packet,vc_ctx_->time_base,v_stream_->time_base);
@@ -148,7 +148,9 @@ bool FFmpegEncoder::flush() {
 
 		av_interleaved_write_frame(f_ctx_,packet);
 
+		av_packet_unref(packet);
 	} 
+	av_packet_free(&packet);
 	int result = av_write_trailer(f_ctx_);
 	if (result < 0) {
 		ErrorUtil::printError(result);

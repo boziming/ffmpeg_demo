@@ -17,6 +17,9 @@ extern "C" {
 int main()
 {
 
+    FFmpegEncoder encoder;
+    encoder.open(640, 480, "out.mp4");
+
     // 1 视频的封装层，解析视频的参数
     AVFormatContext* f_ctx = nullptr;
     const char* inputPath = "demo.mp4";
@@ -103,8 +106,9 @@ int main()
            // 调用时会自动unref一次frame
            while (avcodec_receive_frame(vd_ctx,frame) == 0) {
                // 3 视频帧处理
+               encoder.sendFrame(frame);
                std::cout << frame->pts << ":" << frame->width << "+" << frame->height << std::endl;
-   
+     
            }
         }
         av_packet_unref(packet);
@@ -116,18 +120,18 @@ int main()
     while (avcodec_receive_frame(vd_ctx,frame) == 0) {
     
         // 3 视频帧处理
+        encoder.sendFrame(frame);
         std::cout << frame->pts << std::endl;
-    
     }
+    encoder.flush();
+
+    encoder.stop();
 
     // 4 释放资源 释放对象本身，而不是缓冲区
     av_frame_free(&frame); // 释放frame对象
     av_packet_free(&packet);
     avcodec_free_context(&vd_ctx);
     avformat_close_input(&f_ctx);// 释放上下文，同时释放iocontext
-
-    FFmpegEncoder encoder;
-    result = encoder.open(854,480,"out.mp4");
     std::cout << "结果：" << (int)result << std::endl;
 
     std::cout << "当前环境 FFmpeg 版本: " << av_version_info() << std::endl;
