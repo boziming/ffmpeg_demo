@@ -43,10 +43,6 @@ bool FFmpegEncoder::open(int width,int height, const char* filePath) {
 	vc_ctx_->height = height;
 	vc_ctx_->time_base = { 1,30 };
 	vc_ctx_->pix_fmt = AVPixelFormat::AV_PIX_FMT_YUV420P;
-	// H26X文件的pps和sps vps数据
-	if (f_ctx_->oformat->flags & AVFMT_GLOBALHEADER) {
-		f_ctx_->flags |= AVFMT_GLOBALHEADER;
-	}
 
 	// 2.2 开启编码器
 	result = avcodec_open2(vc_ctx_, v_codec, nullptr);

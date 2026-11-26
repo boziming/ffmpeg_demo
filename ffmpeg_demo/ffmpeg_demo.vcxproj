@@ -126,11 +126,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ErrorUtil.cpp" />
+    <ClCompile Include="FFmpegDecoder.cpp" />
     <ClCompile Include="FFmpegEncoder.cpp" />
     <ClCompile Include="ffmpeg_demo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ErrorUtil.h" />
+    <ClInclude Include="FFmpegDecoder.h" />
     <ClInclude Include="FFmpegEncoder.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

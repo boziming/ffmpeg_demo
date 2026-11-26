@@ -24,6 +24,9 @@
     <ClCompile Include="ErrorUtil.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="FFmpegDecoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -33,6 +36,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ErrorUtil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FFmpegDecoder.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
